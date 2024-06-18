@@ -7,20 +7,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public abstract class AbstractController<T> {
+public abstract class AbstractController<T, ID> {
+
+    protected final AbstractService<T, ID> service;
 
     @Autowired
-    private AbstractService<T, Long> service;
-
+    public AbstractController(AbstractService<T, ID> service) {
+        this.service = service;
+    }
 
     @GetMapping("/get/all")
     public ResponseEntity<List<T>> getAll() {
-        List<T> entity = service.getAll();
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        List<T> entities = service.getAll();
+        return new ResponseEntity<>(entities, HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<T> getById(@PathVariable Long id) {
+    public ResponseEntity<T> getById(@PathVariable ID id) {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
 
@@ -30,12 +33,12 @@ public abstract class AbstractController<T> {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<T> update(@RequestBody T entity, @PathVariable Long id) {
+    public ResponseEntity<T> update(@RequestBody T entity, @PathVariable ID id) {
         return new ResponseEntity<>(service.update(entity, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable ID id) {
         service.delete(id);
     }
 }

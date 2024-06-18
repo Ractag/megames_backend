@@ -2,17 +2,14 @@ package com.megames_backend.store;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public abstract class AbstractService<T, Long> {
+public abstract class AbstractService<T, ID> {
 
-    protected JpaRepository<T, Long> repository;
+    protected final JpaRepository<T, ID> repository;
 
-
-    public AbstractService(JpaRepository<T, Long> repository) {
+    public AbstractService(JpaRepository<T, ID> repository) {
         this.repository = repository;
     }
 
@@ -20,7 +17,7 @@ public abstract class AbstractService<T, Long> {
         return repository.findAll();
     }
 
-    public T getById(Long id) {
+    public T getById(ID id) {
         return repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("No entity with id " + id)
         );
@@ -30,9 +27,9 @@ public abstract class AbstractService<T, Long> {
         return repository.save(entity);
     }
 
-    public abstract T update(T entity, Long id);
+    public abstract T update(T entity, ID id);
 
-    public void delete(Long id) {
+    public void delete(ID id) {
         repository.deleteById(id);
     }
 }

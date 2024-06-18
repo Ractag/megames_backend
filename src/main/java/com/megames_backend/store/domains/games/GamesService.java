@@ -1,36 +1,38 @@
 package com.megames_backend.store.domains.games;
 
 import com.megames_backend.store.AbstractService;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GamesService extends AbstractService<Games, Long> {
 
-    private GamesRepository gamesRepository;
+    private final GamesRepository gamesRepository;
 
-    public GamesService(JpaRepository<Games, Long> repository) {
-        super(repository);
+    @Autowired
+    public GamesService(GamesRepository gamesRepository) {
+        super(gamesRepository);
+        this.gamesRepository = gamesRepository;
     }
 
     @Override
     public Games update(Games entity, Long id) {
-        Games foundGames= getById(id);
-        foundGames.setTitle(entity.getTitle());
-        foundGames.setDescription(entity.getDescription());
-        foundGames.setGenre(entity.getGenre());
-        foundGames.setPlatform(entity.getPlatform());
-        foundGames.setReleaseDate(entity.getReleaseDate());
-        foundGames.setDeveloper(entity.getDeveloper());
-        foundGames.setPublisher(entity.getPublisher());
-        foundGames.setPrice(entity.getPrice());
-        foundGames.setRating(entity.getRating());
-        foundGames.setAgeRating(entity.getAgeRating());
-        foundGames.setCoverImageUrl(entity.getCoverImageUrl());
-        foundGames.setTrailerUrl(entity.getTrailerUrl());
-        foundGames.setMultiplayer(entity.getMultiplayer());
-        foundGames.setTags(entity.getTags());
+        Games foundGame = getById(id);
+        foundGame.setTitle(entity.getTitle());
+        foundGame.setDescription(entity.getDescription());
+        foundGame.setGenre(entity.getGenre());
+        foundGame.setPlatform(entity.getPlatform());
+        foundGame.setReleaseDate(entity.getReleaseDate());
+        foundGame.setDeveloper(entity.getDeveloper());
+        foundGame.setPublisher(entity.getPublisher());
+        foundGame.setPrice(entity.getPrice());
+        foundGame.setRating(entity.getRating());
+        foundGame.setAgeRating(entity.getAgeRating());
+        foundGame.setCoverImageUrl(entity.getCoverImageUrl());
+        foundGame.setTrailerUrl(entity.getTrailerUrl());
+        foundGame.setMultiplayer(entity.getMultiplayer());
+        foundGame.setTags(entity.getTags());
 
-        return repository.save(foundGames);
+        return gamesRepository.save(foundGame);
     }
 }
